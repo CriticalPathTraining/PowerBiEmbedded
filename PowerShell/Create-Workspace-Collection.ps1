@@ -3,12 +3,12 @@
 
 cls
 
-$tenantName = "PBI2017"
-$tenantAdminAccountName = "Student"
+$tenantName = "YOUR_TENANT"
+$tenantAdminAccountName = "YOUR_ADMIN_ACCOUNT"
 $tenantDomain = $tenantName + ".onMicrosoft.com"
 $tenantAdminSPN = $tenantAdminAccountName + "@" + $tenantDomain
 
-$password = "Pa`$`$word!"
+$password = "YOUR_PASSWORD"
 $securePassword = ConvertTo-SecureString –String $password –AsPlainText -Force
 $credential = New-Object –TypeName System.Management.Automation.PSCredential `
                          –ArgumentList $tenantAdminSPN, $securePassword
