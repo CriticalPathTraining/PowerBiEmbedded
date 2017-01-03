@@ -1,0 +1,60 @@
+﻿body {
+    background-color: black;
+    padding: 0;
+    margin: 0;
+}
+
+
+#toolbar{
+    background-color: #DDD;
+    min-height: 480px;
+    padding: 8px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+#toolbar h3 {
+    font-size: 1em;
+    margin: 2px;
+    padding: 8px;
+    border-radius: 4px;
+    background-color: black;
+    color: white;
+}
+
+.panel {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.panel-body {
+    padding: 2px;
+    padding-left: 8px;
+}
+
+#page-navigation {
+    background-color: white;
+    margin-left: 8px;
+    padding: 8px;
+    font-size: 1em;
+}
+
+input[type="radio"] {
+    margin-right: 6px;
+}
+
+#toolbar button {
+    margin-top: 4px;
+    margin-left: 10px;
+    margin-bottom: 12px;
+    width: 44%;
+    background-color: #FFC;
+    border-radius: 8px;
+    border: 1px solid #aAA;
+    font-size: 0.9em;
+}
+
+.checkbox {
+    margin-left: 6px;
+    font-size: 1em;
+}
