@@ -27,17 +27,16 @@ namespace PBIEmbeddedDemo_Provisioning {
     const string armVersionQueryString = "?api-version=2016-09-01";
     const string pbiVersionQueryString = "?api-version=2016-01-29";
     const string armResource = "https://management.core.windows.net/";
-
+    // the magic GUID - points to a registered Azure application ID
     static string clientId = "ea0616ba-638b-4df5-95b9-636659ae5121";
     static Uri redirectUri = new Uri("urn:ietf:wg:oauth:2.0:oob");
-
     static string powerBiRestApiBaseUrl = "https://api.powerbi.com";
     static string azureRestApiBaseUrl = "https://management.azure.com";
 
     static string subscriptionId = ConfigurationManager.AppSettings["subscriptionId"];
     static string subscriptionUser = ConfigurationManager.AppSettings["subscriptionUser"];
     static string subscriptionPassword = ConfigurationManager.AppSettings["subscriptionPassword"];
-    static string azureProvisioningLocation = ConfigurationManager.AppSettings["azureProvisioningLocation"];    
+    static string azureProvisioningLocation = ConfigurationManager.AppSettings["azureProvisioningLocation"];
     static string resourceGroup = ConfigurationManager.AppSettings["resourceGroup"];
     static string workspaceCollectionName = ConfigurationManager.AppSettings["workspaceCollectionName"];
     static string pbixFilePath = ConfigurationManager.AppSettings["pbixFilePath"];
@@ -67,7 +66,7 @@ namespace PBIEmbeddedDemo_Provisioning {
         Console.WriteLine("Resource group named " + resourceGroup + " does not exist");
         CreateResourceGroup(subscriptionId, resourceGroup);
       }
-      
+
       List<string> existingWorkspaceCollectionNames = GetWorkspaceCollectionNames(subscriptionId, resourceGroup);
 
       if (existingWorkspaceCollectionNames.Contains(workspaceCollectionName)) {
@@ -79,18 +78,21 @@ namespace PBIEmbeddedDemo_Provisioning {
       }
 
       var key = GetWorkspaceCollectionKey(subscriptionId, resourceGroup, workspaceCollectionName);
-      //Console.WriteLine("Access Key: " + key);
+      Console.WriteLine();
+      Console.WriteLine("Access Key:");
+      Console.WriteLine(key);
+      Console.WriteLine();
 
       var metadata = GetWorkspaceCollectionMetadata(subscriptionId, resourceGroup, workspaceCollectionName);
       //Console.WriteLine(metadata);
-
+      //Console.WriteLine();
 
       Workspace workspace = GetFirstWorkspace(workspaceCollectionName);
       Console.WriteLine("Workspace ID: " + workspace.WorkspaceId);
 
       Console.WriteLine();
-      Console.WriteLine("Deleting all existing datasets in workspace during testing");
-      DeleteAllDatasets(workspaceCollectionName, workspace.WorkspaceId);
+      Console.WriteLine("Deleting all existing datasets with same dataset Name");
+      DeleteDataset(workspaceCollectionName, workspace.WorkspaceId, importedReportId);
 
       Console.WriteLine();
       Console.WriteLine("Import new PBIX file to create a new dataset");
@@ -100,6 +102,13 @@ namespace PBIEmbeddedDemo_Provisioning {
       Console.WriteLine("List data source information for new dataset");
       ListDatasets(workspaceCollectionName, workspace.WorkspaceId);
 
+      Console.WriteLine();
+      Console.WriteLine("Updating security credentials for Azure SQL Data Source...");
+      UpdateAzureSqlDataSource(workspaceCollectionName, workspace.WorkspaceId, importedReportId);
+
+      Console.WriteLine();
+      Console.WriteLine("All work has been completed.");
+      Console.WriteLine();
 
     }
 
@@ -120,7 +129,7 @@ namespace PBIEmbeddedDemo_Provisioning {
         resourceGroupList.Add(group.name);
       }
 
-      return resourceGroupList;      
+      return resourceGroupList;
     }
 
     static void CreateResourceGroup(string subscriptionId, string resourceGroupName) {
@@ -132,7 +141,7 @@ namespace PBIEmbeddedDemo_Provisioning {
 
       ResourceGroup newResourceGroup = new ResourceGroup {
         location = azureProvisioningLocation,
-        name = resourceGroupName,       
+        name = resourceGroupName,
       };
 
       string jsonNewResourceGroup = JsonConvert.SerializeObject(newResourceGroup);
@@ -192,7 +201,7 @@ namespace PBIEmbeddedDemo_Provisioning {
       WorkspaceCollection newWorkspaceCollection = new WorkspaceCollection {
         location = azureProvisioningLocation,
         name = workspaceCollectionName,
-        sku = new Sku {  name="S1", tier="Standard"}
+        sku = new Sku { name = "S1", tier = "Standard" }
       };
 
       string jsonNewWorkspaceCollection = JsonConvert.SerializeObject(newWorkspaceCollection);
@@ -267,10 +276,10 @@ namespace PBIEmbeddedDemo_Provisioning {
 
       // get access key for current workspace collection
       string accessKey = GetWorkspaceCollectionKey(subscriptionId, resourceGroup, workspaceCollectionName);
-      
+
       // Create a token credentials with "AppKey" type
-      var credentials = new TokenCredentials(accessKey, "AppKey");      
-      
+      var credentials = new TokenCredentials(accessKey, "AppKey");
+
       // Instantiate your Power BI client passing in the required credentials
       var client = new PowerBIClient(credentials);
 
@@ -298,7 +307,7 @@ namespace PBIEmbeddedDemo_Provisioning {
     static Workspace GetFirstWorkspace(string workspaceCollectionName) {
       using (var client = CreatePowerBIClient()) {
         var workspaces = client.Workspaces.GetWorkspacesByCollectionNameAsync(workspaceCollectionName).Result.Value;
-        if(workspaces.Count > 0) {
+        if (workspaces.Count > 0) {
           return workspaces.First();
         }
         else {
@@ -333,20 +342,20 @@ namespace PBIEmbeddedDemo_Provisioning {
 
     static void ListDatasets(string workspaceCollectionName, string workspaceId) {
       using (var client = CreatePowerBIClient()) {
-        ODataResponseListDataset response = client.Datasets.GetDatasetsAsync(workspaceCollectionName, workspaceId).Result;
+        IList<Dataset> datasets = client.Datasets.GetDatasetsAsync(workspaceCollectionName, workspaceId).Result.Value;
 
-        if (response.Value.Any()) {
-          foreach (Dataset d in response.Value) {
+        if (datasets.Any()) {
+          foreach (Dataset dataset in datasets) {
             Console.WriteLine("-------------------------------------------");
-            Console.WriteLine("Dataset: {0} ({1})", d.Name, d.Id);
+            Console.WriteLine("Dataset: {0} ({1})", dataset.Name, dataset.Id);
 
-            var sources = client.Datasets.GetGatewayDatasourcesAsync(workspaceCollectionName, workspaceId, d.Id).Result;
+            IList<GatewayDatasource> datasources = client.Datasets.GetGatewayDatasourcesAsync(workspaceCollectionName, workspaceId, dataset.Id).Result.Value;
 
-            foreach (var ds in sources.Value) {             
-              Console.WriteLine(" - Data source ID: " + ds.Id);
-              Console.WriteLine(" - Data source Type: " + ds.DatasourceType);
-              Console.WriteLine(" - Gateway ID: " + ds.GatewayId);
-              Console.WriteLine(" - Connection Details: " + ds.ConnectionDetails);
+            foreach (GatewayDatasource datasource in datasources) {
+              Console.WriteLine(" - Data source ID: " + datasource.Id);
+              Console.WriteLine(" - Data source Type: " + datasource.DatasourceType);
+              Console.WriteLine(" - Gateway ID: " + datasource.GatewayId);
+              Console.WriteLine(" - Connection Details: " + datasource.ConnectionDetails);
               Console.WriteLine();
             }
           }
@@ -359,58 +368,59 @@ namespace PBIEmbeddedDemo_Provisioning {
 
     static void DeleteDataset(string workspaceCollectionName, string workspaceId, string datasetId) {
       using (var client = CreatePowerBIClient()) {
-        client.Datasets.DeleteDatasetByIdAsync(workspaceCollectionName, workspaceId, datasetId).Wait();
-
-      }
+        var datasets = client.Datasets.GetDatasetsAsync(workspaceCollectionName, workspaceId).Result.Value;
+        foreach (var dataset in datasets) {
+          if (dataset.Name.Equals(datasetId)){
+            Console.WriteLine("Deleting dataset named " + dataset.Name + " with ID of " + dataset.Name + "...");
+            client.Datasets.DeleteDatasetByIdAsync(workspaceCollectionName, workspaceId, dataset.Id).Wait();
+          }
+        }
+      }      
     }
-
 
     static void DeleteAllDatasets(string workspaceCollectionName, string workspaceId) {
       using (var client = CreatePowerBIClient()) {
         var datasets = client.Datasets.GetDatasetsAsync(workspaceCollectionName, workspaceId).Result.Value;
-        foreach(var dataset in datasets) {
+        foreach (var dataset in datasets) {
           Console.WriteLine("Deleting dataset named " + dataset.Id + "...");
           client.Datasets.DeleteDatasetByIdAsync(workspaceCollectionName, workspaceId, dataset.Id).Wait();
         }
       }
     }
 
-    static void UpdateConnection(string workspaceCollectionName, string workspaceId, string datasetId) {
-
-
-      string connectionString = null;
-      Console.Write("Connection String (enter to skip): ");
-      connectionString = Console.ReadLine();
-      Console.WriteLine();
+    static void UpdateAzureSqlDataSource(string workspaceCollectionName, string workspaceId, string datasetId) {
 
       using (var client = CreatePowerBIClient()) {
-        // Optionally udpate the connectionstring details if preent
-        if (!string.IsNullOrWhiteSpace(connectionString)) {
-          var connectionParameters = new Dictionary<string, object>
-          {
-                        { "connectionString", connectionString }
-                    };
-          client.Datasets.SetAllConnectionsAsync(workspaceCollectionName, workspaceId, datasetId, connectionParameters).Wait();
-        }
+        IList<Dataset> datasets = client.Datasets.GetDatasetsAsync(workspaceCollectionName, workspaceId).Result.Value;
 
-        // Get the datasources from the dataset
-        var datasources = client.Datasets.GetGatewayDatasourcesAsync(workspaceCollectionName, workspaceId, datasetId).Result;
+        foreach (Dataset dataset in datasets) {
+          if (dataset.Name == datasetId) {
 
-        // Reset your connection credentials
-        var delta = new GatewayDatasource {
-          CredentialType = "Basic",
-          BasicCredentials = new BasicCredentials {
-            Username = azureSqlUser,
-            Password = azureSqlPassword
+            // update connection string to change 
+            //var connectionParameters = new Dictionary<string, object>();
+            //connectionParameters.Add("connectionString", "");
+            //client.Datasets.SetAllConnectionsAsync(workspaceCollectionName, workspaceId, datasetId, connectionParameters).Wait();
+
+            var datasources = client.Datasets.GetGatewayDatasourcesAsync(workspaceCollectionName, workspaceId, dataset.Id).Result;
+
+            // Reset your connection credentials
+            var delta = new GatewayDatasource {
+              CredentialType = "Basic",
+              BasicCredentials = new BasicCredentials {
+                Username = azureSqlUser,
+                Password = azureSqlPassword
+              }
+            };
+
+            if (datasources.Value.Count != 1) {
+              Console.Write("Expected one datasource, updating the first");
+            }
+
+            // Update the datasource with the specified credentials
+            client.Gateways.PatchDatasourceAsync(workspaceCollectionName, workspaceId, datasources.Value[0].GatewayId, datasources.Value[0].Id, delta).Wait();
+
           }
-        };
-
-        if (datasources.Value.Count != 1) {
-          Console.Write("Expected one datasource, updating the first");
         }
-
-        // Update the datasource with the specified credentials
-        client.Gateways.PatchDatasourceAsync(workspaceCollectionName, workspaceId, datasources.Value[0].GatewayId, datasources.Value[0].Id, delta).Wait();
       }
     }
 

@@ -1,0 +1,58 @@
+﻿.a {
+  background-color: white;
+}
+
+a:active, a:hover {
+  outline: 0;
+}
+
+.flyout-menu-panel {
+  background-color: white;
+  margin-left: 48px;
+  padding: 0px;
+  padding-top: 8px;
+  padding-bottom: 1px;
+}
+
+
+.navbar {
+  margin-bottom: 0px;
+}
+
+
+
+body {
+  background-color: black;
+  padding: 0;
+  margin: 0;
+}
+
+
+.checkbox {
+  margin-left: 0px;
+  font-size: 1em;
+  margin-bottom: 12px;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+
+#noReportView {
+  min-height: 600px;
+  width: 100%;
+  background-color: white;
+  padding: 24px;
+}
+
+#pbi-prev-page, #pbi-next-page  {
+  font-size: 1em;
+  width: 80px;
+}
+
+
+#pbi-prev-page {
+  margin-left: 16px;
+}
+
+#pbi-next-page {
+    margin-left: 4px;
+}

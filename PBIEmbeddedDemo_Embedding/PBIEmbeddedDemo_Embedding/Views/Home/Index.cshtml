@@ -1,0 +1,175 @@
+﻿@model PBIEmbeddedDemo_Embedding.Models.ReportsViewModel
+
+<div class="row content-container">
+  <nav class="navbar navbar-default navbar-fixed-top navbar-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-expand-toggle">
+          <i class="fa fa-angle-double-right icon"></i>
+        </button>
+        @if (@Model.CurrentReport != null) {
+          <ol class="breadcrumb navbar-breadcrumb">
+            <li>@Model.CurrentReport.Report.Name</li>
+          </ol>
+        }
+        else {
+          <ol class="breadcrumb navbar-breadcrumb">
+            <li>Power BI Embedded Report Viewer Demo</li>
+          </ol>
+
+        }
+        <button type="button" class="navbar-right-expand-toggle pull-right visible-xs">
+          <i class="fa fa-th icon"></i>
+        </button>
+      </div>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown profile">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Walter White<span class="caret"></span></a>
+          <ul class="dropdown-menu animated fadeInDown">
+            <li class="profile-img">
+              <img src="~/Content/img/CurrentUser.jpg" class="profile-img">
+            </li>
+            <li>
+              <div class="profile-info">
+                <h4 class="username">Walter White</h4>
+                <p>walter@HeisenbergLabs.com</p>
+                <div class="btn-group margin-bottom-2x" role="group">
+                  <button type="button" class="btn btn-default"><i class="fa fa-user"></i> Profile</button>
+                  <button type="button" class="btn btn-default"><i class="fa fa-sign-out"></i> Logout</button>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+
+
+
+
+  <div class="side-menu sidebar-inverse">
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="side-menu-container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">
+            <div class="icon fa fa-dashboard"></div>
+            <div class="title">Wingtip Toys</div>
+          </a>
+          <button type="button" class="navbar-expand-toggle pull-right visible-xs">
+            <i class="fa fa-times icon"></i>
+          </button>
+        </div>
+        <ul class="nav navbar-nav">
+          <li class="panel panel-default dropdown">
+            <a data-toggle="collapse" href="#reports-nav">
+              <span class="icon fa fa-bar-chart"></span><span class="title">Reports</span>
+            </a>
+            <!-- Dropdown level 1 -->
+            <div id="reports-nav" class="panel-collapse collapse">
+              <div class="flyout-menu-panel">
+
+                <ul class="nav navbar-nav">
+                  @foreach (var report in Model.Reports) {
+                    var reportClass = Request.QueryString["reportId"] == report.Id ? "active" : "";
+                    <li class="navbar-nav @reportClass">
+                      @Html.ActionLink(report.Name, "Index", new { reportId = report.Id })
+                    </li>
+                  }
+                </ul>
+              </div>
+            </div>
+          </li>
+
+        </ul>
+
+        @if (Model.CurrentReport != null) {
+          <div id="reportLoadedElements">
+
+            <ul class="nav navbar-nav">
+              <li class="panel panel-default dropdown">
+                <a data-toggle="collapse" href="#report-config">
+                  <span class="icon fa fa-wrench"></span><span class="title">Report Configuration</span>
+                </a>
+                <!-- Dropdown level 1 -->
+                <div id="report-config" class="panel-collapse collapse">
+                  <div class="flyout-menu-panel">
+                    <div class="checkbox">
+                      <label>
+                        <input id="setting-shownav" type="checkbox" /> Show Navigation
+                      </label>
+                    </div>
+                    <div class="checkbox">
+                      <label>
+                        <input id="setting-showfilterpane" type="checkbox" /> Show Filter Pane
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+
+            <ul class="nav navbar-nav">
+              <li class="panel panel-default dropdown">
+                <a data-toggle="collapse" href="#pages-nav">
+                  <span class="icon fa fa-sitemap"></span><span class="title">Report Pages</span>
+                </a>
+                <!-- Dropdown level 1 -->
+                <div id="pages-nav" class="panel-collapse collapse">
+                  <div class="flyout-menu-panel">
+
+                    <div class="panel-body">
+                      <ul id="page-navigation" class="nav navbar-nav"></ul>
+
+                      <div>
+                        <hr />
+                        <button id="pbi-prev-page" class="btn btn-default">Previous</button>
+                        <button id="pbi-next-page" class="btn btn-default">Next</button>
+                      </div>
+
+                    </div>
+                  </div>
+              </li>
+
+            </ul>
+
+            <ul class="nav navbar-nav">
+              <li class="panel panel-default dropdown">
+                <a id="print-link" data-toggle="collapse" href="javascript:;">
+                  <span class="icon fa fa-print"></span><span class="title">Print Report</span>
+                </a>
+                </li>
+              </ul>
+
+          </div>
+        }
+
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+  </div>
+  <div class="container-fluid">
+    <div class="side-body padding-top">
+      @if (Model.CurrentReport != null) {
+        //
+        @Html.PowerBIReportFor(
+      Model => Model.CurrentReport.Report,
+      new {
+        id = "pbi-report",
+        style = "height:85vh;",
+        powerbi_access_token = Model.CurrentReport.AccessToken
+      })
+      }
+      else {
+        <div id="noReportView">
+          <h3>
+            <span class="fa fa-cubes icon"></span>Welcome to the Power BI Report Viewer Demo
+          </h3>
+          <div>Select a report to load from the left-side <b>Reports</b> navigation menu</div>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
