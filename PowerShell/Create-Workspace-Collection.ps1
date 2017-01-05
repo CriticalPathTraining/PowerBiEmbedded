@@ -29,12 +29,18 @@ if(!$resourceGroup){
 }
 
 $workspaceCollectionName = "wingtip-sales"
-$workspaceCollection = Get-AzureRmPowerBIWorkspaceCollection -ResourceGroupName $resourceGroupName -WorkspaceCollectionName $workspaceCollectionName -ErrorAction Ignore
+$workspaceCollection = Get-AzureRmPowerBIWorkspaceCollection `
+                           -ResourceGroupName $resourceGroupName `
+                           -WorkspaceCollectionName $workspaceCollectionName `
+                           -ErrorAction Ignore
 
 # Create new workspace collection if it doesn't already exist
 if(!$workspaceCollection){
   Write-Host "Workspace collection named" $workspaceCollectionName "does not exist - now creating it"
-  $workspaceCollection = New-AzureRmPowerBIWorkspaceCollection -ResourceGroupName $resourceGroupName -WorkspaceCollectionName $workspaceCollectionName -Location $location
+  $workspaceCollection = New-AzureRmPowerBIWorkspaceCollection `
+                             -ResourceGroupName $resourceGroupName `
+                             -WorkspaceCollectionName $workspaceCollectionName `
+                             -Location $location
 }
 
 Write-Host
@@ -44,7 +50,10 @@ Write-Host "Workspace Collection ID: " + $workspaceCollection.Id
 Write-Host
 
 # get access key for workspace collection
-$keys = Get-AzureRmPowerBIWorkspaceCollectionAccessKeys -ResourceGroupName $resourceGroupName -WorkspaceCollectionName $workspaceCollectionName
+$keys = Get-AzureRmPowerBIWorkspaceCollectionAccessKeys `
+            -ResourceGroupName $resourceGroupName `
+            -WorkspaceCollectionName $workspaceCollectionName
+
 $accessKey = $keys[0].Value
 
 Write-Host

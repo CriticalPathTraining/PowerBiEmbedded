@@ -366,6 +366,16 @@ namespace PBIEmbeddedDemo_Provisioning {
       }
     }
 
+    static void DeleteAllDatasets(string workspaceCollectionName, string workspaceId) {
+      using (var client = CreatePowerBIClient()) {
+        var datasets = client.Datasets.GetDatasetsAsync(workspaceCollectionName, workspaceId).Result.Value;
+        foreach (var dataset in datasets) {
+          Console.WriteLine("Deleting dataset named " + dataset.Id + "...");
+          client.Datasets.DeleteDatasetByIdAsync(workspaceCollectionName, workspaceId, dataset.Id).Wait();
+        }
+      }
+    }
+
     static void DeleteDataset(string workspaceCollectionName, string workspaceId, string datasetId) {
       using (var client = CreatePowerBIClient()) {
         var datasets = client.Datasets.GetDatasetsAsync(workspaceCollectionName, workspaceId).Result.Value;
@@ -378,31 +388,12 @@ namespace PBIEmbeddedDemo_Provisioning {
       }      
     }
 
-    static void DeleteAllDatasets(string workspaceCollectionName, string workspaceId) {
-      using (var client = CreatePowerBIClient()) {
-        var datasets = client.Datasets.GetDatasetsAsync(workspaceCollectionName, workspaceId).Result.Value;
-        foreach (var dataset in datasets) {
-          Console.WriteLine("Deleting dataset named " + dataset.Id + "...");
-          client.Datasets.DeleteDatasetByIdAsync(workspaceCollectionName, workspaceId, dataset.Id).Wait();
-        }
-      }
-    }
-
     static void UpdateAzureSqlDataSource(string workspaceCollectionName, string workspaceId, string datasetId) {
-
       using (var client = CreatePowerBIClient()) {
         IList<Dataset> datasets = client.Datasets.GetDatasetsAsync(workspaceCollectionName, workspaceId).Result.Value;
-
         foreach (Dataset dataset in datasets) {
           if (dataset.Name == datasetId) {
-
-            // update connection string to change 
-            //var connectionParameters = new Dictionary<string, object>();
-            //connectionParameters.Add("connectionString", "");
-            //client.Datasets.SetAllConnectionsAsync(workspaceCollectionName, workspaceId, datasetId, connectionParameters).Wait();
-
             var datasources = client.Datasets.GetGatewayDatasourcesAsync(workspaceCollectionName, workspaceId, dataset.Id).Result;
-
             // Reset your connection credentials
             var delta = new GatewayDatasource {
               CredentialType = "Basic",
@@ -411,18 +402,15 @@ namespace PBIEmbeddedDemo_Provisioning {
                 Password = azureSqlPassword
               }
             };
-
-            if (datasources.Value.Count != 1) {
-              Console.Write("Expected one datasource, updating the first");
-            }
-
             // Update the datasource with the specified credentials
-            client.Gateways.PatchDatasourceAsync(workspaceCollectionName, workspaceId, datasources.Value[0].GatewayId, datasources.Value[0].Id, delta).Wait();
-
+            client.Gateways.PatchDatasourceAsync(workspaceCollectionName, 
+                                                 workspaceId, 
+                                                 datasources.Value[0].GatewayId, 
+                                                 datasources.Value[0].Id,
+                                                 delta).Wait();
           }
         }
       }
     }
-
   }
 }
