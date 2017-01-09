@@ -1,0 +1,138 @@
+﻿@model PowerBiEmbeddedReportViewer.Models.ReportsViewModel
+
+@{
+  // these variables are used to determine whether lefty nav is collapsed when page loads
+  // the left nav is collapsed when loading page with no current report
+  // the left nav is expanded when loading page when a report is being embedded
+  bool ReportIsLoading = (Model.CurrentReport != null);
+  string navigationPaneCollapsedStyle = (!ReportIsLoading) ? "navigationPaneCollapsed" : "";
+  string contentBodyNavigationCollapsedStyle = (!ReportIsLoading) ? "contentBodyNavigationCollapsed" : "";
+  string leftNavHideStyle = (!ReportIsLoading) ? "leftNavHide" : "";
+  string hideIfCollapsed = (!ReportIsLoading) ? "hidden" : "";
+}
+
+<div id="banner">
+  <div id="app-icon"></div>
+  <div id="top-nav" class="hidden-xs">
+    <ul>
+      <li><span class="fa fa-user" /></li>
+      <li><a href="#">Walter White</a></li>
+      <li><span class="fa fa-caret-down" /></li>
+    </ul>
+  </div>
+  <div id="app-title">
+    @if (ReportIsLoading) {
+      @Model.CurrentReport.Report.Name
+      <span id="reportTitleInTitleArea"></span>
+    }
+    else {
+      <text>Power BI Report Viewer</text>
+    }
+  </div>
+</div>
+
+<div id="left-nav" class="navigationPane @navigationPaneCollapsedStyle" style="height:800px;">
+  <div id="navigation-toggle" class="fa fa-mail-forward"></div>
+
+  <div id="left-nav-body">
+
+    <div class="leftNavSection">
+      <div class="leftNavIcon fa fa-bar-chart"></div>
+      <div class="leftNavTitle leftNavItem @leftNavHideStyle">Reports</div>
+      <ul id="reportsMenu" class="leftNavMenu leftNavItem @leftNavHideStyle">
+        @foreach (var report in Model.Reports) {
+          var reportClass = Request.QueryString["reportId"] == report.Id ? "activeReport" : "";
+          <li class="@reportClass">
+            @Html.ActionLink(report.Name, "Index", new { reportId = report.Id })
+          </li>
+        }
+      </ul>
+    </div>
+
+    <div id="report-loading-message" class="leftNavSection" @hideIfCollapsed>
+      <div class="leftNavTitle">Loading Report...</div>
+    </div>
+
+
+    @if (ReportIsLoading) {
+
+      <div id="report-elements" hidden>
+
+        <div class="leftNavSection">
+          <div class="leftNavIcon fa fa-wrench"></div>
+          <div class="leftNavTitle leftNavItem @leftNavHideStyle">Report Configuration</div>
+          <div class="leftNavMenu leftNavItem @leftNavHideStyle">
+            <label>
+              <input id="setting-shownav" type="checkbox" /> Show Navigation
+            </label>
+            <label>
+              <input id="setting-showfilterpane" type="checkbox" /> Show Filter Pane
+            </label>
+          </div>
+        </div>
+
+        <div class="leftNavSection">
+          <div class="leftNavIcon fa fa-book"></div>
+          <div class="leftNavTitle leftNavItem leftNavItem @leftNavHideStyle">
+            <span>Report Pages</span>
+            <span id="page-navigation-buttons">
+              <span id="goto-prev-page" class="fa fa-arrow-circle-left"></span>
+              <span>&nbsp;</span>
+              <span id="goto-next-page" class="fa fa-arrow-circle-right"></span>
+            </span>
+          </div>
+
+          <ul id="page-navigation" class="leftNavMenu leftNavItem @leftNavHideStyle">
+            <!-- report pages loaded using onReportLoaded event handler -->
+          </ul>
+
+        </div>
+
+        <div class="leftNavSection">
+          <div id="print-report-page" class="leftNavIconPrint fa fa-print"></div>
+          <div class="leftNavTitle leftNavItem @leftNavHideStyle">Print</div>
+        </div>
+
+      </div>
+    }
+  </div>
+</div>
+
+<div id="content-body" class="contentBody @contentBodyNavigationCollapsedStyle">
+
+  <div class="side-body padding-top">
+    @if (ReportIsLoading) {
+
+      @Html.PowerBIReportFor(
+      Model => Model.CurrentReport.Report,
+      new {
+        id = "pbi-report",
+        style = "height:90vh;",
+        powerbi_access_token = Model.CurrentReport.AccessToken
+      })
+    }
+    else {
+      <div id="noReportView">
+        <h3>
+          <span class="fa fa-cubes icon"></span>Welcome to the Power BI Report Viewer Demo
+        </h3>
+        <div>Select a report to load from the left-side <b>Reports</b> navigation menu</div>
+      </div>
+    }
+  </div>
+
+</div>
+
+`
+@if (ReportIsLoading) {
+  <script language="JavaScript">
+    var leftNavCollapsed = false;
+    console.log("Loading with left-nav expanded")
+  </script>
+}
+else {
+  <script language="JavaScript">
+    var leftNavCollapsed = true;
+    console.log("Loading with left-nav collapsed")
+  </script>
+}
