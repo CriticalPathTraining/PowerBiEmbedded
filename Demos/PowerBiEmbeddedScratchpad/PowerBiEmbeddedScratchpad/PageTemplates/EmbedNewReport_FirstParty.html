@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="utf-8" />
+  <title>@AppName</title>
+  <script src="scripts/jquery.js"></script>
+  <script src="scripts/powerbi.js"></script>
+</head>
+
+<body style="margin:0;padding:0;background-color:#EEE;">
+
+  <div id="embedContainer" />
+
+  <script>
+
+    // Get data required for embedding
+    var embedWorkspaceId= "@EmbedWorkspaceId";
+    var embedDatasetId = "@EmbedDatasetId";
+    var embedUrl = "@EmbedUrl";
+    var accessToken = "@EmbedToken";
+
+    // Get models object to access enums for embed configuration
+    var models = window['powerbi-client'].models;
+
+    var config = {
+      datasetId: embedDatasetId,
+      embedUrl: embedUrl,
+      accessToken: accessToken,
+      tokenType: models.TokenType.Aad,
+    };
+
+    console.log(config);
+
+    // Get a reference to the embedded report HTML element
+    var embedContainer = document.getElementById('embedContainer');
+
+    // Embed the report and display it within the div container.
+    var report = powerbi.createReport(embedContainer, config);
+    
+
+    // this event fires whenever user runs save or SaveAs command on a new report
+    report.on("saved", function (event) {
+
+      console.log("saved");
+      console.log(event.detail);
+
+      // get ID and name of new report
+      var newReportId = event.detail.reportObjectId;
+      var newReportName = event.detail.reportName;
+
+      // set new title for browser window
+      document.title = newReportName;
+
+      powerbi.reset(embedContainer);
+
+      config = {
+        type: 'report',
+        id: newReportId ,
+        embedUrl: "https://app.powerbi.com/reportEmbed?reportId=" + newReportId + "&groupId=" + embedWorkspaceId,
+        accessToken: accessToken,
+        tokenType: models.TokenType.Aad,
+        permissions: models.Permissions.All,
+        viewMode: models.ViewMode.Edit,
+      };
+      
+      // Embed the report and display it within the div container.
+      var report = powerbi.embed(embedContainer, config);
+
+
+    });    
+   
+        
+
+    $(function () {
+      var widthBuffer = 12;
+      var heightBuffer = 12;
+      $("#embedContainer").height($(window).height() - (heightBuffer));
+      $("#embedContainer").width($(window).width() - widthBuffer);
+      $(window).resize(function () {
+        $("#embedContainer").height($(window).height() - (heightBuffer));
+        $("#embedContainer").width($(window).width() - widthBuffer);
+      });
+    });
+
+  </script>
+
+</body>
+</html>

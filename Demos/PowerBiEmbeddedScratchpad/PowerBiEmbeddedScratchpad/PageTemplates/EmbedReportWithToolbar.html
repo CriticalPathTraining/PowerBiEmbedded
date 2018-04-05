@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="utf-8" />
+  <title>@AppName</title>
+  <link href="css/app.css" rel="stylesheet" />
+  <script src="scripts/jquery.js"></script>
+  <script src="scripts/powerbi.js"></script>
+</head>
+
+<body style="margin:0;padding:0;background-color:#EEE;">
+
+  <div id="toolbar">
+    <button type="button" id="toggleEdit" style="font-size:14px" >Toggle Edit Mode</button>
+    <button type="button" id="fullScreen" style="font-size:14px">Full Screen</button>
+  </div>
+
+  <div id="reportContainer" />
+
+  <script>
+
+    // data required for embedding Power BI report
+    var embedReportId = "@EmbedReportId";
+    var embedUrl = "@EmbedUrl";
+    var accessToken = "@EmbedToken";
+
+    // Get models object to access enums for embed configuration
+    var models = window['powerbi-client'].models;
+
+    var config = {
+      type: 'report',
+      id: embedReportId,
+      embedUrl: embedUrl,
+      accessToken: accessToken,
+      tokenType: models.TokenType.Embed,
+      permissions: models.Permissions.All,
+      viewMode: models.ViewMode.View,
+      settings: {
+        filterPaneEnabled: false,
+        navContentPaneEnabled: true,
+        extensions: [
+          {
+            command: {
+              name: "My Super Cool Command",
+              title: "command title",
+              icon: "data:image/png;base64,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",
+              extend:
+              {
+                visualContextMenu: {
+                  title: "My Super Cool Context Menu Command",
+                },
+                visualOptionsMenu: {
+                  title: "My Super Cool Oprtions Menu Command",
+                }
+              }
+            }
+          }
+        ]
+      }
+    };
+
+    // Get a reference to the embedded report HTML element
+    var reportContainer = document.getElementById('reportContainer');
+
+    // Embed the report and display it within the div container.
+    var report = powerbi.embed(reportContainer, config);
+
+    var viewMode = "view";
+
+    $("#toggleEdit").click(function () {
+      viewMode = (viewMode == "view") ? "edit" : "view";
+      report.switchMode(viewMode);
+    });
+
+
+
+    $("#fullScreen").click(function () {
+      report.fullscreen();
+    });
+
+    report.on("commandTriggered", function (command) {
+      console.log(command);
+    });
+
+
+    
+
+    $(function () {
+      var widthBuffer = 12;
+      var heightBuffer = 24;
+      var toolbarHeight = $("#toolbar").height();
+      $("#reportContainer").height($(window).height() - (heightBuffer + toolbarHeight ));
+      $("#reportContainer").width($(window).width() - widthBuffer);
+      $(window).resize(function () {
+        var toolbarHeight = $("#toolbar").height();
+        $("#reportContainer").height($(window).height() - (heightBuffer + toolbarHeight));
+        $("#reportContainer").width($(window).width() - widthBuffer);
+      });
+    });
+
+
+
+  </script>
+
+</body>
+</html>
