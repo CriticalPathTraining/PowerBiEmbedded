@@ -13,7 +13,7 @@ namespace PowerBiEmbeddedScratchpad {
       //PageGenerator.GenerateDashboardPage();
       //PageGenerator.GenerateDashboardTilePage();
       //PageGenerator.GenerateReportInspectorPage();
-      PageGenerator.GenerateReportVisualPage();
+      //PageGenerator.GenerateReportVisualPage();
       //PageGenerator.GenerateQnaPage();
     }
 
