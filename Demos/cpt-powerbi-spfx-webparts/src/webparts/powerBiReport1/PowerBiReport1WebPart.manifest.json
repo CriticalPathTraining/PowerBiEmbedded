@@ -1,0 +1,20 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "72ab076a-0355-4f41-bd29-84cd4087e83d",
+  "alias": "PowerBiReport1WebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "preconfiguredEntries": [{
+    "groupId": "5c03119e-3074-46fd-976b-c60198311f70", 
+    "group": { "default": "Critical Path Training" },
+    "title": { "default": "CPT Simple PBIE Report" },
+    "description": { "default": "A simple Power BI Embedding demo" },
+    "officeFabricIconFontName": "PowerBiLogo",
+    "properties": {
+      "reportHeight": 480,
+      "showPageTabs": true
+    }
+    }]
+  }

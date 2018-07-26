@@ -1,0 +1,26 @@
+#top-nav {
+  float: left;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding-top: 6px;
+}
+
+#top-nav ul {
+  line-height: 1em;
+  padding-left: 24px;
+}
+
+
+#top-nav ul li {
+  display: inline-block;
+  margin-right: 16px;
+  color: #FEBF0F;
+}
+
+  #top-nav li a, 
+  #top-nav li a:visited, 
+  #top-nav li a:active {
+    color: #FEBF0F;
+    text-decoration: none;
+  }

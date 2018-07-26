@@ -1,0 +1,37 @@
+﻿@model EmbeddedLab.Models.NewReportEmbeddingData
+
+<div id="embedContainer" />
+
+<script src="~/Scripts/powerbi.js"></script>
+<script>
+
+  // Get data required for embedding
+  var embedWorkspaceId = "@Model.workspaceId";
+  var embedDatasetId = "@Model.datasetId";
+  var embedUrl = "@Model.embedUrl";
+  var accessToken = "@Model.accessToken";
+
+  // Get models object to access enums for embed configuration
+  var models = window['powerbi-client'].models;
+
+  var config = {
+    datasetId: embedDatasetId,
+    embedUrl: embedUrl,
+    accessToken: accessToken,
+    tokenType: models.TokenType.Embed,
+  };
+
+  // Get a reference to the embedded report HTML element
+  var embedContainer = document.getElementById('embedContainer');
+
+  // Embed the report and display it within the div container.
+  var report = powerbi.createReport(embedContainer, config);
+
+  // add event handler to load existing report afer saving new report
+  report.on("saved", function (event) {
+    console.log("saved");
+    console.log(event.detail);
+    window.location.href = "/Home/Reports/?reportId=" + event.detail.reportObjectId;
+  });
+
+</script>

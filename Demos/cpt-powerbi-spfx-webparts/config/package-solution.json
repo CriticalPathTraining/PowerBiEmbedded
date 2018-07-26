@@ -1,0 +1,31 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "cpt-powerbi-spfx-webparts",
+    "id": "f3438921-2de8-4e44-a7dd-7dd333c27e1d",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "webApiPermissionRequests": [
+      {
+        "resource": "Power BI Service",
+        "scope": "Group.Read.All"
+      },
+      {
+        "resource": "Power BI Service",
+        "scope": "Dataset.Read.All"
+      },
+      {
+        "resource": "Power BI Service",
+        "scope": "Report.Read.All"
+      },
+      {
+        "resource": "Power BI Service",
+        "scope": "Dashboard.Read.All"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/cpt-powerbi-spfx-webparts.sppkg"
+  }
+}

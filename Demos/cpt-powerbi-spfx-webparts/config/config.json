@@ -1,0 +1,45 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "power-bi-report-1-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/powerBiReport1/PowerBiReport1WebPart.js",
+          "manifest": "./src/webparts/powerBiReport1/PowerBiReport1WebPart.manifest.json"
+        }
+      ]
+    },
+    "power-bi-report-loader-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/powerBiReportLoader/PowerBiReportLoaderWebPart.js",
+          "manifest": "./src/webparts/powerBiReportLoader/PowerBiReportLoaderWebPart.manifest.json"
+        }
+      ]
+    },
+    "power-bi-react-report-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/powerBiReactReport/PowerBiReactReportWebPart.js",
+          "manifest": "./src/webparts/powerBiReactReport/PowerBiReactReportWebPart.manifest.json"
+        }
+      ]
+    },
+    "power-bi-react-dashboard-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/powerBiReactDashboard/PowerBiReactDashboardWebPart.js",
+          "manifest": "./src/webparts/powerBiReactDashboard/PowerBiReactDashboardWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "PowerBiReport1WebPartStrings": "lib/webparts/powerBiReport1/loc/{locale}.js",
+    "PowerBiReportLoaderWebPartStrings": "lib/webparts/powerBiReportLoader/loc/{locale}.js",
+    "PowerBiReactReportWebPartStrings": "lib/webparts/powerBiReactReport/loc/{locale}.js",
+    "PowerBiReactDashboardWebPartStrings": "lib/webparts/powerBiReactDashboard/loc/{locale}.js"
+  }
+}

@@ -1,0 +1,32 @@
+﻿@model EmbeddedLab.Models.QnaEmbeddingData
+
+<div id="embedContainer" />
+
+<script src="~/Scripts/powerbi.js"></script>
+<script>
+
+  // Get data required for embedding
+  var datasetId = "@Model.datasetId";
+  var embedUrl = "@Model.embedUrl";
+  var accessToken = "@Model.accessToken";
+
+  // Get models object to access enums for embed configuration
+  var models = window['powerbi-client'].models;
+
+  var config = {
+    type: 'qna',
+    tokenType: models.TokenType.Embed,
+    accessToken: accessToken,
+    embedUrl: embedUrl,
+    datasetIds: [datasetId],
+    viewMode: models.QnaMode.Interactive,
+    question: "What is sales revenue by quarter and sales region as stacked area chart"
+  };
+
+  // Get a reference to the embedded report HTML element
+  var embedContainer = document.getElementById('embedContainer');
+
+  // Embed the report and display it within the div container.
+  var embeddedObject = powerbi.embed(embedContainer, config);
+
+</script>

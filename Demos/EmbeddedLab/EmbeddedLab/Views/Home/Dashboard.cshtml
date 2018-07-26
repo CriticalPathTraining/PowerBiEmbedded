@@ -1,0 +1,31 @@
+﻿@model EmbeddedLab.Models.DashboardEmbeddingData
+
+<div id="embedContainer" />
+
+<script src="~/Scripts/powerbi.js"></script>
+<script>
+
+  // data required for embedding Power BI report
+  var embedDashboardId = "@Model.dashboardId";
+  var embedUrl = "@Model.embedUrl";
+  var accessToken = "@Model.accessToken";
+
+  // Get models object to access enums for embed configuration
+  var models = window['powerbi-client'].models;
+
+  var config = {
+    type: 'dashboard',
+    id: embedDashboardId,
+    embedUrl: embedUrl,
+    accessToken: accessToken,
+    tokenType: models.TokenType.Embed,
+    pageView: "fitToWidth"
+  };
+
+  // Get a reference to the embedded report HTML element
+  var embedContainer = document.getElementById('embedContainer');
+
+  // Embed the report and display it within the div container.
+  var dashboard = powerbi.embed(embedContainer, config);
+
+</script>

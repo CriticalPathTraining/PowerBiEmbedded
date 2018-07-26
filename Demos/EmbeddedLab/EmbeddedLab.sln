@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2009
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmbeddedLab", "EmbeddedLab\EmbeddedLab.csproj", "{095F3C14-335B-4FD1-9B16-A219C9B50C6C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{095F3C14-335B-4FD1-9B16-A219C9B50C6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{095F3C14-335B-4FD1-9B16-A219C9B50C6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{095F3C14-335B-4FD1-9B16-A219C9B50C6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{095F3C14-335B-4FD1-9B16-A219C9B50C6C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7CC6EF45-92B4-4FDE-B107-17B133148E2E}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "ce3f94c2-165f-45a0-a386-0feeb3cafcc9",
+  "alias": "PowerBiReportLoaderWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "preconfiguredEntries": [{
+    "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+    "group": { "default": "Critical Path Training" },
+    "title": { "default": "CPT Report Loader" },
+    "description": { "default": "A web part that allows user to load reports" },
+    "officeFabricIconFontName": "PowerBiLogo",
+    "properties": {
+      "workspaceId": "",
+      "reportId": ""
+    }
+  }]
+}

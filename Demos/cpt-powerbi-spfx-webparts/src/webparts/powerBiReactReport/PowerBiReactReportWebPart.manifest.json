@@ -1,0 +1,21 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "a694e2d0-a4f4-45e8-9955-47df354bc32f",
+  "alias": "PowerBiReactReportWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "preconfiguredEntries": [{
+    "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+    "group": { "default": "Critical Path Training" },
+    "title": { "default": "CPT React Report" },
+    "description": { "default": "A sample of using React to embed a Power BI report." },
+    "officeFabricIconFontName": "PowerBiLogo",
+    "properties": {
+      "workspaceId": "",
+      "reportId": "",
+      "widthToHeight": "175"
+    }
+  }]
+}

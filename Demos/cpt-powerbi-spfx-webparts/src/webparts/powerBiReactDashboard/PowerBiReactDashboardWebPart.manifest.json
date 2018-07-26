@@ -1,0 +1,21 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "fbd8b623-aea0-4501-846e-6dee6ae05461",
+  "alias": "PowerBiReactDashboardWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "preconfiguredEntries": [{
+    "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+    "group": { "default": "Critical Path Training" },
+    "title": { "default": "CPT React Dashboard" },
+    "description": { "default": "A sample of using React to embed a Power BI dashboard." },
+    "officeFabricIconFontName": "PowerBiLogo",
+    "properties": {
+      "workspaceId": "",
+      "dashboardId": "",
+      "widthToHeight": "175"
+    }
+  }]
+}
