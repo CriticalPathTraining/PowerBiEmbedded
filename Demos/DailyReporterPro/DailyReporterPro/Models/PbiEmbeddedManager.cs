@@ -28,7 +28,7 @@ namespace DailyReporterPro.Models {
 
   public class PbiEmbeddedManager {
 
-    static string aadAuthorizationEndpoint = "https://login.windows.net/common/oauth2/authorize";
+    static string aadAuthorizationEndpoint = "https://login.microsoftonline.com/common";
     static string resourceUriPowerBi = "https://analysis.windows.net/powerbi/api";
     static string urlPowerBiRestApiRoot = "https://api.powerbi.com/";
 
