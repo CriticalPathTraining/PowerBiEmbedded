@@ -13,7 +13,7 @@ namespace EmbeddedLab.Models {
 
     #region "private implementation details"
 
-    private static string aadAuthorizationEndpoint = "https://login.windows.net/common/oauth2/authorize";
+    private static string aadAuthorizationEndpoint = "https://login.microsoftonline.com/common";
     private static string resourceUriPowerBi = "https://analysis.windows.net/powerbi/api";
     private static string urlPowerBiRestApiRoot = "https://api.powerbi.com/";
 
