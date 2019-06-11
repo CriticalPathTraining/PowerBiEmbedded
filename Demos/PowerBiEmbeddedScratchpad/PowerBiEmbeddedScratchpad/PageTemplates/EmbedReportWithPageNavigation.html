@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <title>@AppName</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link href="css/app.css" rel="stylesheet" />
+  <script src="scripts/jquery.js"></script>
+  <script src="scripts/powerbi.js"></script>
+</head>
+<body style="margin:0;padding:0;background-color:#EEE;">
+  <div id="leftnav" style="float:left; width:240px;">
+    <h3>Page Navigation</h3>
+    <div id="loading">
+      <img title="Loading..." src="css/img/loading.gif" style="width:80px;margin-top:36px;margin-left:72px;" />
+    </div>
+    <div id="leftnav-menu">
+      <ul id="page-navigation"></ul>
+    </div>
+  </div>
+  <div id="embedContainer" style="margin-left: 260px;" />
+  <script>
+
+    // data required for embedding Power BI report
+    var embedReportId = "@EmbedReportId";
+    var embedUrl = "@EmbedUrl";
+    var accessToken = "@EmbedToken";
+
+    // Get models object to access enums for embed configuration
+    var models = window['powerbi-client'].models;
+
+    var config = {
+      type: 'report',
+      id: embedReportId,
+      embedUrl: embedUrl,
+      accessToken: accessToken,
+      tokenType: models.TokenType.Embed,
+      permissions: models.Permissions.All,
+      viewMode: models.ViewMode.View,
+      settings: {
+        filterPaneEnabled: false,
+        navContentPaneEnabled: false,
+      }
+    };
+
+    // Get a reference to the embedded report HTML element
+    var embedContainer = document.getElementById('embedContainer');
+
+    // Embed the report and display it within the div container.
+    var report = powerbi.embed(embedContainer, config);
+
+
+    $("#loading").show();
+
+    var pages;
+
+    report.on('loaded', function () {
+      $("#loading").hide();
+      report.getPages().then(
+        function (reportPages) {
+          pages = reportPages;
+          loadReportPages(pages);
+        });
+    });
+
+    var loadReportPages = function (pages) {
+
+      var pageNavigation = $("#page-navigation");
+      pageNavigation.empty();
+
+      // enumerate through page of the report
+      for (var index = 0; index < pages.length; index++) {
+        // determine which pages are visible and not hidden
+        if (pages[index].visibility == 0) { // 0 means visible and 1 means hidden
+          // get page display name
+          var reportPageDisplayName = pages[index].displayName;
+          // use jQuery create a navigation link for each page
+          pageNavigation.append($("<li>")
+            .append($('<a href="javascript:;" >')
+              .text(pages[index].displayName))
+            .click(function (domEvent) {
+              // get text from link to get page name
+              var targetPageName = domEvent.target.textContent ? domEvent.target.textContent : domEvent.target.firstChild.textContent;
+              // get target page from pages collection
+              var targetPage = pages.find(function (page) { return page.displayName === targetPageName; });
+              // display page object in browser console
+              console.log(targetPage);
+              // navigate report to target page
+              targetPage.setActive();
+            }));
+        }
+      }
+    }
+
+
+    $(function () {
+      var widthBuffer = 272;
+      var heightBuffer = 18;
+      $("#embedContainer").width($(window).width() - widthBuffer);
+      $("#embedContainer").height($(window).height() - heightBuffer);
+      $("#leftnav").height($(window).height() - heightBuffer);
+      $(window).resize(function () {
+        $("#embedContainer").width($(window).width() - widthBuffer);
+        $("#embedContainer").height($(window).height() - (heightBuffer));
+        $("#leftnav").height($(window).height() - heightBuffer);
+      });
+    });
+
+
+
+  </script>
+</body>
+</html>

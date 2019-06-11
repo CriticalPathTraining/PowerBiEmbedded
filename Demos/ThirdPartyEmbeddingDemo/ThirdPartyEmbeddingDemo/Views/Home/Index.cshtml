@@ -1,0 +1,18 @@
+﻿
+<div id="homePageContainer" class="container">
+
+  <div class="jumbotron">
+    <h2>Third-party Power BI Embedding Demo</h2>
+
+    @if (!User.Identity.IsAuthenticated) {
+      <div>Click the <strong>log in</strong> link to sign in</div>
+    }
+    else {
+      <div>The user is currently authenticated as <strong>@User.Identity.Name</strong></div>
+      <br/>
+      <div>Navigate to the @Html.ActionLink("User Info View", "UserInfo", "Home") to see detailed information about the current user.
+      </div>
+    }
+  </div>
+
+</div>

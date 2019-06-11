@@ -1,0 +1,25 @@
+#banner {
+  padding: 0px;
+  color: white;
+  border-bottom: 1px solid black;
+}
+
+#app-icon {
+  float: left;
+  height: 47px;
+  width: 47px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('./../images/AppIcon.png')
+}
+
+#app-title {
+  color: white;
+  float: left;
+  display: flex;
+  align-items: center;
+  height: 48px;
+  padding-left: 12px;
+  font-size: 18px;
+}

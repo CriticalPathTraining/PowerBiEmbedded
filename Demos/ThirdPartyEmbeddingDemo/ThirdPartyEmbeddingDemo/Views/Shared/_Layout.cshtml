@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Third-Party Embedding Demo</title>
+  <link href="~/Content/bootstrap.css" rel="stylesheet" />
+  <link href="~/Content/Site.css" rel="stylesheet" />
+  <script src="~/Scripts/jquery-3.3.1.js"></script>
+</head>
+
+<body>
+
+  <!-- Add Banner with TopNav and Toolbar Here -->
+  <div id="banner" class="container">
+    <nav id="topnav" class="navbar navbar-expand-sm navbar-dark bg-dark">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          @Html.ActionLink("Third-Party Embedding Demo", "Index", "Home",
+                            routeValues: null, htmlAttributes: new { @class = "nav-link navbar-brand" })
+        </li>
+        <li class="nav-item">
+          @Html.ActionLink("Report", "Index", "Reports",
+                           routeValues: null, htmlAttributes: new { @class = "nav-link" })
+        </li>
+        
+      </ul>
+      @Html.Partial("_LoginPartial")
+    </nav>
+    @RenderSection("toolbar", required: false)
+  </div>
+
+  <!-- Add Main Body Content Here -->
+  <div id="content-box" class="container body-content">
+    @RenderBody()
+  </div>
+
+
+  <!-- Add JavaScript Code to Resize Page Elements Here -->
+  <script>
+    $(function () {
+      var heightBuffer = 12;
+      var newHeight = $(window).height() - ($("#banner").height() + heightBuffer);
+      $("#content-box").height(newHeight);
+      $("#embedContainer").height(newHeight);
+      $(window).resize(function () {
+        var newHeight = $(window).height() - ($("#banner").height() + heightBuffer);
+        $("#content-box").height(newHeight);
+        $("#embedContainer").height(newHeight);
+      });
+    });
+  </script>
+
+
+</body>
+
+
+</html>

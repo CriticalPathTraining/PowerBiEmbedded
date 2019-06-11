@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Report Inspector</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link href="css/app.css" rel="stylesheet" />
+  <script src="scripts/jquery.js"></script>
+  <script src="scripts/powerbi.js"></script>
+</head>
+
+<body>
+
+  <div id="output-display" style="float:right; width:400px; overflow: auto;"></div>
+
+  <div id="embedContainerContainer" style="margin-right:400px">
+    <div id="embedContainer" />
+  </div>
+
+  <script>
+
+    // data required for embedding Power BI report
+    var embedReportId = "@EmbedReportId";
+    var embedUrl = "@EmbedUrl";
+    var accessToken = "@EmbedToken";
+
+    // Get models object to access enums for embed configuration
+    var models = window['powerbi-client'].models;
+
+    var config = {
+      type: 'report',
+      id: embedReportId,
+      embedUrl: embedUrl,
+      accessToken: accessToken,
+      tokenType: models.TokenType.Embed,
+      permissions: models.Permissions.All,
+      viewMode: models.ViewMode.View,
+      settings: {
+        filterPaneEnabled: false,
+        navContentPaneEnabled: true,
+      }
+    };
+
+    // Get a reference to the embedded report HTML element
+    var reportContainer = document.getElementById('embedContainer');
+
+    // Embed the report and display it within the div container.
+    var report = powerbi.embed(reportContainer, config);
+
+    $("#output-display").append($("<h3>").text("Visuals in this Report"));
+
+    var pages;
+
+    report.on('loaded', () => {
+      report.getPages().then(
+        function (reportPages) {
+          pages = reportPages;
+          for (var index = 0; index < pages.length; index++) {
+            pages[index].getVisuals().then(function (pageVisuals) {
+              for (var vindex = 0; vindex < pageVisuals.length; vindex++) {
+                console.log(pageVisuals[vindex]);
+                $("#visual-table")
+                  .append($("<tr>")
+                    .append($("<td>").text(pageVisuals[vindex].page.displayName))
+                    .append($("<td>").text(pageVisuals[vindex].name))
+                    .append($("<td>").text(pageVisuals[vindex].type))
+                  );
+
+              }
+            });
+          }
+          $("#output-display").append($("<table>", { ID: "visual-table" })
+            .append($("<thead>")
+              .append($("<td>").text("Page"))
+              .append($("<td>").text("Visual Name"))
+              .append($("<td>").text("Type"))
+            ));
+
+        });
+    });
+
+
+
+
+
+    // code to resize the reportContainer to the size of the hosting browser window.
+    $(function () {
+      var widthBuffer = 450;
+      var heightBuffer = 25;
+      $("#output-display").height($(window).height() - (heightBuffer));
+      $("#embedContainer").height($(window).height() - (heightBuffer));
+      $("#embedContainer").width($(window).width() - widthBuffer);
+      $(window).resize(function () {
+        $("#output-display").height($(window).height() - (heightBuffer));
+        $("#embedContainer").height($(window).height() - (heightBuffer));
+        $("#embedContainer").width($(window).width() - widthBuffer);
+      });
+    });
+
+  </script>
+
+</body>
+</html>

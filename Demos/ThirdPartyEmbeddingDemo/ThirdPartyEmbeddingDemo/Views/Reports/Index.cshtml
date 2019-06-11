@@ -1,0 +1,69 @@
+﻿@model ThirdPartyEmbeddingDemo.Models.ReportEmbeddingData
+
+@if (User.IsInRole("Admin")) {
+  @section toolbar {
+    <div id="toolbar" class="btn-toolbar bg-dark" role="toolbar">
+      <button type="button" id="toggleEdit" class="btn btn-sm">Toggle Edit Mode</button>
+      <button type="button" id="fullScreen" class="btn btn-sm">Full Screen</button>
+    </div>
+  }
+}
+
+
+<div id="embedContainer" />
+
+<script src="~/Scripts/powerbi.js"></script>
+
+<script>
+
+  // data required for embedding Power BI report
+  var embedReportId = "@Model.reportId";
+  var embedUrl = "@Model.embedUrl";
+  var accessToken = "@Model.accessToken";
+
+  // Get models object to access enums for embed configuration
+  var models = window['powerbi-client'].models;
+
+  var config = {
+    type: 'report',
+    id: embedReportId,
+    embedUrl: embedUrl,
+    accessToken: accessToken,
+    permissions: models.Permissions.All,
+    tokenType: models.TokenType.Embed,
+    viewMode: models.ViewMode.View,
+    settings: {
+      filterPaneEnabled: false,
+      navContentPaneEnabled: true,
+    }
+  };
+
+  // Get a reference to HTML element that will be embed container
+  var reportContainer = document.getElementById('embedContainer');
+
+  // Embed the report and display it within the div container.
+  var report = powerbi.embed(reportContainer, config);
+
+  var viewMode = "view";
+
+  $("#toggleEdit").click(function () {
+    // toggle between view and edit mode
+    viewMode = (viewMode == "view") ? "edit" : "view";
+    report.switchMode(viewMode);
+    // show filter pane when entering edit mode
+    var showFilterPane = (viewMode == "edit");
+    report.updateSettings({
+      "filterPaneEnabled": showFilterPane
+    });
+  });
+
+  $("#fullScreen").click(function () {
+    report.fullscreen();
+  });
+
+  $("#print").click(function () {
+    report.print();
+  });
+
+
+</script>

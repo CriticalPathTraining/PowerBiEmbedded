@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <title>Navigating with Bookmarks</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link href="css/app.css" rel="stylesheet" />
+  <script src="scripts/jquery.js"></script>
+  <script src="scripts/powerbi.js"></script>
+</head>
+<body style="margin:0;padding:0;background-color:#EEE;">
+
+  <div id="embedContainer" />
+  
+  <script>
+
+    // data required for embedding Power BI report
+    var embedReportId = "@EmbedReportId";
+    var embedUrl = "@EmbedUrl";
+    var accessToken = "@EmbedToken";
+
+    // Get models object to access enums for embed configuration
+    var models = window['powerbi-client'].models;
+
+    var config = {
+      type: 'report',
+      id: embedReportId,
+      embedUrl: embedUrl,
+      accessToken: accessToken,
+      tokenType: models.TokenType.Embed,
+      permissions: models.Permissions.All,
+      viewMode: models.ViewMode.View,
+      settings: {
+        filterPaneEnabled: false,
+        navContentPaneEnabled: false,
+      }
+    };
+
+    // Get a reference to the embedded report HTML element
+    var embedContainer = document.getElementById('embedContainer');
+
+    // Embed the report and display it within the div container.
+    var report = powerbi.embed(embedContainer, config);
+
+    var reportBookmarks;
+    var nextBookmarksIndex = 1;
+
+    var applyNextBookmark = function () {
+      // get the next bookmark from the bookmarks connection
+      var targetBookmark = reportBookmarks[nextBookmarksIndex];
+      // apply the bookmark
+      report.bookmarksManager.apply(targetBookmark.name);
+
+      // advance nextBookmarksIndex variable
+      nextBookmarksIndex++;
+      if (nextBookmarksIndex >= reportBookmarks.length) {
+        nextBookmarksIndex = 0;
+      }
+
+    }
+
+    report.on('loaded', function () {
+      
+      report.bookmarksManager.play(models.BookmarksPlayMode.Presentation);
+
+      report.bookmarksManager.getBookmarks().then(
+        function (bookmarks) {
+          reportBookmarks = bookmarks;
+          setInterval(applyNextBookmark, 5000)
+        });
+    });
+
+    report.on("bookmarkApplied", (event) => {
+      console.log("Bookmark Applied", event.detail);
+    });
+
+
+
+
+
+    $(function () {
+      var widthBuffer = 12;
+      var heightBuffer = 12;
+      $("#embedContainer").width($(window).width() - widthBuffer);
+      $("#embedContainer").height($(window).height() - heightBuffer);
+      $("#leftnav").height($(window).height() - heightBuffer);
+      $(window).resize(function () {
+        $("#embedContainer").width($(window).width() - widthBuffer);
+        $("#embedContainer").height($(window).height() - (heightBuffer));
+        $("#leftnav").height($(window).height() - heightBuffer);
+      });
+    });
+
+
+  </script>
+</body>
+</html>

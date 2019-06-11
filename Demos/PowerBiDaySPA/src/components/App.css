@@ -1,0 +1,93 @@
+body {
+  margin: 0px;
+  padding: 0px;
+  background-color: orange;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+}
+
+#left-nav-col {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+#content-col {
+  padding-left: 0;
+  padding-right: 0;
+
+}
+
+#page-container{
+  background-color: white;
+  min-height: 600px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border: 1px solid black;
+}
+
+#embed-container {
+  height: 600px;
+  min-height: 600px;;
+}
+
+.content-body {
+  padding: 24px;
+}
+
+.message-body {
+  padding-top: 18px;
+  padding-left: 32px;
+  font-size: 1.75em;
+  color: #CCC;
+}
+
+.jumbotron {
+  padding-top: 18px;
+  padding-bottom: 16px;
+}
+
+#left-nav {
+  padding: 8px;
+  width: 100%;
+  float: left;
+  background-color: #EEE;
+  border: 1px solid #999;
+  border-bottom-right-radius: 8px;
+}
+
+#left-nav-header {
+  color: darkblue;
+  font-size: 14px;
+  font-weight: bold;
+  border-bottom: 1px solid darkblue;
+  margin-bottom: 4px;
+}
+
+#left-nav ul {
+  padding: 0px;
+  margin: 0px;
+  list-style-type: none;
+}
+
+#left-nav li {
+  border: 0px;
+  margin: 0px;
+}
+
+  #left-nav a, 
+  #left-nav a:hover,
+  #left-nav a:visited
+   {
+    margin: 2px;
+    padding: 0;
+    color: black;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none; 
+  }
+
+  
+
+  #left-nav:empty {
+    display: none;
+    background-color: red;
+  }

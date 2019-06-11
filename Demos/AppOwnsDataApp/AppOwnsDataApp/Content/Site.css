@@ -1,0 +1,59 @@
+﻿body {
+  background-image: url(img/background.jpg);
+  background-size: auto;
+  background-repeat: round;
+}
+
+#banner {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+#topnav {
+  background-color: #000 !important;
+}
+
+.navbar-dark .navbar-nav .active > .nav-link {
+  color: #FFC;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: #F2C811;
+}
+
+  .navbar-dark .navbar-nav .nav-link:hover {
+    color: orange;
+  }
+
+
+#toolbar {
+  background-color: #666 !important;
+  border-bottom: 1px solid #333;
+}
+
+  #toolbar button {
+    margin: 4px;
+    font-size: 9px;
+    font-weight: bold;
+    padding: 2px;
+    color: #222;
+    background-color: #F2C811;
+    border-color: #111;
+    width: 92px;
+  }
+
+
+#content-box {
+  padding: 0px;
+  background-color: #FFF;
+}
+
+#homePageContainer {
+  padding: 24px;
+}
+
+
+.jumbotron {
+  background-color: #FFFFF1;
+  border: 1px solid #AAA;
+}

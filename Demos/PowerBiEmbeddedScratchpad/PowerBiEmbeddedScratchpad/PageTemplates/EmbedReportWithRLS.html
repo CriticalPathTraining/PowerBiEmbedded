@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <title>@AppName</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link href="css/app.css" rel="stylesheet" />
+  <script src="scripts/jquery.js"></script>
+  <script src="scripts/powerbi.js"></script>
+</head>
+<body style="margin:0;padding:0;background-color:#EEE;">
+
+  <div id="toolbar">
+    <button type="button" id="loadReportAllData" style="font-size:14px">All Regions</button>
+    <button type="button" id="loadReportWestern" style="font-size:14px">Western Region</button>
+    <button type="button" id="loadReportCentral" style="font-size:14px">Central Region</button>
+    <button type="button" id="loadReportEastern" style="font-size:14px">Eastern Region</button>
+    <button type="button" id="loadReportCombo" style="font-size:14px">Combo Regions</button>
+  </div>
+  <div id="reportContainer" />
+ 
+  <script>
+
+    // data required for embedding Power BI report
+    var embedReportId = "@EmbedReportId";
+    var embedUrl = "@EmbedUrl";
+    var embedTokenAllData = "@EmbedTokenAllData";
+    var embedTokenWesternSales = "@EmbedTokenWesternSales";
+    var embedTokenCentralSales = "@EmbedTokenCentralSales";
+    var embedTokenEasternSales = "@EmbedTokenEasternSales ";
+    var embedTokenCombo = "@EmbedTokenCombo";
+
+    // Get models object to access enums for embed configuration
+    var models = window['powerbi-client'].models;
+
+    // Get a reference to the embedded report HTML element
+    var reportContainer = document.getElementById('reportContainer');
+
+    var loadReport = function(embedToken){
+
+      var config = {
+        type: 'report',
+        id: embedReportId,
+        embedUrl: embedUrl,
+        accessToken: embedToken,
+        tokenType: models.TokenType.Embed,
+        viewMode: models.ViewMode.View,
+        settings: {
+          filterPaneEnabled: false,
+          navContentPaneEnabled: true
+        }
+      };
+
+      // reset target element to load new report
+      powerbi.reset(reportContainer);
+
+      // Embed the report and display it within the div container.
+      var report = powerbi.embed(reportContainer, config);
+
+    }
+
+
+    $("#loadReportAllData").click(function () { loadReport(embedTokenAllData) });
+    $("#loadReportWestern").click(function () { loadReport(embedTokenWesternSales) });
+    $("#loadReportCentral").click(function () { loadReport(embedTokenCentralSales) });
+    $("#loadReportEastern").click(function () { loadReport(embedTokenEasternSales) });
+    $("#loadReportCombo").click(  function () { loadReport(embedTokenCombo) });
+    
+    loadReport(embedTokenEasternSales);
+
+    $(function () {
+      var widthBuffer = 12;
+      var heightBuffer = 24;
+      var toolbarHeight = $("#toolbar").height();
+      $("#reportContainer").height($(window).height() - (heightBuffer + toolbarHeight));
+      $("#reportContainer").width($(window).width() - widthBuffer);
+      $(window).resize(function () {
+        var toolbarHeight = $("#toolbar").height();
+        $("#reportContainer").height($(window).height() - (heightBuffer + toolbarHeight));
+        $("#reportContainer").width($(window).width() - widthBuffer);
+      });
+    });
+
+
+
+  </script>
+</body>
+</html>

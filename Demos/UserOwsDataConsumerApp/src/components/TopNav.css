@@ -1,0 +1,20 @@
+#top-nav ul {
+  line-height: 1em;
+  padding-left: 24px;
+}
+
+#top-nav ul li {
+  display: inline-block;
+  margin-right: 16px;
+  color: #FEBF0F;
+}
+
+#top-nav li a {
+  color: #FEBF0F;  
+  font-size: 1.0em;
+  text-decoration: none;
+}
+
+#top-nav li a.active-nav-link {
+  color: yellow;
+}

@@ -1,0 +1,99 @@
+﻿body {
+  background-color: #ccc;
+}
+
+#homePageContainer {
+  padding: 24px;
+}
+
+#userInfoPageContainer {
+  padding: 24px;
+}
+
+  #userInfoPageContainer h2 {
+    color: white;
+    background-color: black;
+    margin-bottom: 0px;
+    padding: 4px;
+    font-size: 1.25em;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+  }
+
+
+#userInfoTable{
+  margin-top: 0px;
+}
+
+#userInfoTable td:first-child {
+  width: 164px;
+}
+
+
+  #userInfoTable ul {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+  }
+
+  #userInfoTable ul li {
+    margin: 0px;
+    padding: 0px;
+    color: purple;
+  }
+
+#content-box {
+  padding: 0px;
+  background-color: #FFF;
+}
+
+#banner {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+#topnav {
+  background-color: #000 !important;
+}
+
+#toolbar {
+  background-color: #666 !important;
+  border-bottom: 1px solid #333;
+}
+
+  #toolbar button {
+    width: 92px;
+    margin: 4px;
+    padding: 2px;
+    font-size: 9px;
+    font-weight: bold;
+    color: #222;
+    background-color: #F2C811;
+    border-color: #111;
+  }
+
+.navbar-dark .navbar-nav .active > .nav-link {
+  color: #FFC;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: #F2C811;
+}
+
+  .navbar-dark .navbar-nav .nav-link:hover {
+    color: orange;
+  }
+
+.jumbotron {
+  background-color: #FFFFF1;
+  border: 1px solid #AAA;
+}
+
+#loginForm {
+  margin-top: 64px;
+  margin-left: 10%;
+  background-color: #BBB;
+  padding: 24px;
+  width: 80%;
+  margin-bottom: 128px;
+}

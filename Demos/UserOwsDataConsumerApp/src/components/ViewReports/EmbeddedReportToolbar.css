@@ -1,0 +1,20 @@
+#embedded-report-toolbar{
+  background-color: #CCC;
+  text-align: right;
+}
+
+#embedded-report-toolbar button {
+  color: #333;
+  border-style: none;
+  padding: 2px;
+  background-color: transparent;
+  font-size: 0.7em;
+  margin: 2px;
+  margin-right: 8px;
+  text-decoration: none; 
+}
+
+
+#embedded-report-toolbar button:focus {
+  outline:0;
+}

@@ -1,0 +1,49 @@
+﻿@model ThirdPartyEmbeddingDemo.Models.UserIfoViewModel
+
+@{
+  var currentUser = Model;
+}
+
+<div id="userInfoPageContainer" class="container">
+
+  <h2>Current User Info</h2>
+  <table id="userInfoTable" class="table table-sm table-bordered table-striped">
+    <tr>
+    <tr>
+      <td>User ID</td>
+      <td>@currentUser.UserId</td>
+    </tr>
+    <tr>
+      <td>User Name</td>
+      <td>@currentUser.UserName</td>
+    </tr>
+    <tr>
+      <td>User Email</td>
+      <td>@currentUser.UserEmail</td>
+    </tr>
+    <td>User Display Name</td>
+    <td>@currentUser.UserDisplayName</td>
+    </tr>
+    <tr>
+      <td>User is Admin</td>
+      <td>@currentUser.IsAdmin</td>
+    </tr>
+    <tr>
+      <td>User Has Roles</td>
+      <td>@currentUser.HasRoles</td>
+    </tr>
+    @if (currentUser.HasRoles) {
+      <tr>
+        <td>User Roles</td>
+        <td>
+          <ul>
+            @foreach (var role in currentUser.Roles) {
+              <li>@role</li>
+            }
+          </ul>
+        </td>
+      </tr>
+    }
+  </table>
+
+</div>

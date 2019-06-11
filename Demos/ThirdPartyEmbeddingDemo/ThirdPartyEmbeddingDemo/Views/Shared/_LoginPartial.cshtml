@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNet.Identity
+@using ThirdPartyEmbeddingDemo.Models
+@using Microsoft.AspNet.Identity.EntityFramework
+
+@if (Request.IsAuthenticated) {
+  using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "ml-auto" })) {
+    @Html.AntiForgeryToken()
+
+
+
+    ApplicationDbContext context = new ApplicationDbContext();
+    var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+    ApplicationUser currentUser = UserManager.FindByName(User.Identity.GetUserName());
+
+    string ID = currentUser.Id;
+    string Email = currentUser.Email;
+    string Username = currentUser.UserName;
+
+
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        @Html.ActionLink("Welcome " + currentUser.DisplayName, "UserInfo", "Home", routeValues: null, htmlAttributes: new { title = "Manage", @class = "nav-link" })
+      </li>
+      <li class="nav-item" ><a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+
+    </ul>
+  }
+}
+else {
+  <ul class="navbar-nav ml-auto">
+    <li class="nav-item">
+      @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "nav-link" })
+    </li>
+  </ul>
+}
+

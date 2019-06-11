@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="utf-8" />
+  <title>@AppName - Phased Loading</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link href="css/app.css" rel="stylesheet" />
+  <script src="scripts/jquery.js"></script>
+  <script src="scripts/powerbi.js"></script>
+</head>
+
+<body>
+
+  <div id="embedContainer" />
+
+  <script>
+
+
+    // preload preload pbie scripts on this page
+    var preloadConfig = {
+      type: 'report',
+      baseUrl: 'https://embedded.powerbi.com/reportEmbed',
+    };
+
+    var preloadElement = powerbi.preload(preloadConfig);
+
+    preloadElement.onload(function () {
+      console.log("pbie scripts now preloaded into this page");
+    });
+
+
+    // data required for embedding Power BI report
+    var embedReportId = "@EmbedReportId";
+    var embedUrl = "@EmbedUrl";
+    var accessToken = "@EmbedToken";
+
+    // Get models object to access enums for embed configuration
+    var models = window['powerbi-client'].models;
+
+    var config = {
+      type: 'report',
+      id: embedReportId,
+      embedUrl: embedUrl,
+      accessToken: accessToken,
+      tokenType: models.TokenType.Embed,
+    };
+
+    // Get a reference to the embedded report HTML element
+    var reportContainer = document.getElementById('embedContainer');
+
+    // call load() instead of embed() to load the report while delaying the rendering process
+    var report = powerbi.load(embedContainer, config);
+
+    // when loaded event occurs, set current page then call render()
+    report.on("loaded", function () {
+      console.log("loaded event executing");
+      // call to get Pages collection
+      report.getPages().then(
+        function (pages) {
+          // inspect pages in browser console
+          console.log(pages);
+          // display specific page in report
+          var startPage = pages[0]; // this select first page
+          config.pageName = startPage.name;
+          // Call report.render() to display report
+          report.render(config);
+        });
+    });
+
+    report.on('rendered', function () {
+      console.log("rendered event executing");
+    });
+
+
+
+
+    // code to resize the reportContainer to the size of the hosting browser window.
+    $(function () {
+      var widthBuffer = 12;
+      var heightBuffer = 12;
+      $("#embedContainer").height($(window).height() - (heightBuffer));
+      $("#embedContainer").width($(window).width() - widthBuffer);
+      $(window).resize(function () {
+        $("#embedContainer").height($(window).height() - (heightBuffer));
+        $("#embedContainer").width($(window).width() - widthBuffer);
+      });
+    });
+
+  </script>
+
+</body>
+</html>

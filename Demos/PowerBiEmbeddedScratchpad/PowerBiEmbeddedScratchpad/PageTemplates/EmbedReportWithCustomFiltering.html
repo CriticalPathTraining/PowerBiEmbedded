@@ -1,0 +1,198 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="utf-8" />
+  <title>@AppName</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link href="css/app.css" rel="stylesheet" />
+  <script src="scripts/jquery.js"></script>
+  <script src="scripts/powerbi.js"></script>
+</head>
+
+<body style="margin:0;padding:0;background-color:#EEE;">
+
+  <div id="leftnav" style="float:left;" >
+
+    <h3>Custom Filtering </h3>
+
+    <div id="loading" hidden >
+      <img title="Loading..." src="css/img/loading.gif" />
+    </div>
+
+    <div id="leftnav-menu" hidden>
+   
+      <h4>SELECT STATES TO FILTER</h4>
+
+      <div id="state-picker"></div>
+
+      <h4>APPLY PRESET FILTERS</h4>
+
+      <div id="filter-buttons" >
+        <input id="filter-west-coast" type="button" value="West Coast States" />
+        <input id="filter-gulf-coast" type="button" value="Gulf Coast States" />
+        <input id="filter-east-coast" type="button" value="East Coast States" />
+        <input id="remove-all-filters" type="button" value="Remove All Filters" />
+      </div>
+    
+    </div>
+
+  </div>
+
+  <div id="embedContainer" style="margin-left: 260px;" ></div>
+
+  <script>
+
+    // data required for embedding Power BI report
+    var embedReportId = "@EmbedReportId";
+    var embedUrl = "@EmbedUrl";
+    var accessToken = "@EmbedToken";
+
+    // Get models object to access enums for embed configuration
+    var models = window['powerbi-client'].models;
+
+    var config = {
+      type: 'report',
+      id: embedReportId,
+      embedUrl: embedUrl,
+      accessToken: accessToken,
+      tokenType: models.TokenType.Embed,
+      permissions: models.Permissions.All,
+      viewMode: models.ViewMode.View,
+      settings: {
+        filterPaneEnabled: false,
+        navContentPaneEnabled: false,
+      }
+    };
+
+    // Get a reference to the embedded report HTML element
+    var embedContainer = document.getElementById('embedContainer');
+
+    // Embed the report and display it within the div container.
+    var report = powerbi.embed(embedContainer, config);
+
+    $("#loading").show();
+
+    report.on('loaded', function () {
+
+      populateStatePicker();
+
+      $("#state-picker input").click(setStateFilter);
+
+
+      $("#loading").hide();
+      $("#leftnav-menu").show();
+
+      console.log("Report loaded");
+
+      report.getFilters().then(function (filters) {
+       console.log(filters);
+      });
+
+      $("#filter-west-coast").click(function () {
+        selectStates(["CA", "OR", "WA"]);
+      });
+
+
+      $("#filter-gulf-coast").click(function () {
+        selectStates(["AL", "FL", "LA", "MS", "TX"]);
+      });
+
+
+      $("#filter-east-coast").click(function () {
+        selectStates(["CT", "DE", "FL", "GA", "ME", "NC", "NH", "NJ", "NY", "RI", "SC", "VA"]);
+      });
+
+      $("#remove-all-filters").click(unselectAllStates);
+
+
+    });
+
+    var selectStates = function (states) {
+
+      $("#state-picker input").each(function () {
+        var state = $(this).prop('id');
+        var selectState = (states.indexOf(state) > -1);
+        $(this).prop('checked', selectState);
+      });
+
+      setStateFilter();
+    }
+
+
+    var unselectAllStates = function () {
+
+      $("#state-picker input:checked").each(function () {
+        $(this).prop('checked', false);
+      });
+
+      setStateFilter();
+    }
+
+    var populateStatePicker = function () {
+
+      var states = ['AK', 'AL', 'AR', 'AZ', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'IA', 'ID', 'IL', 'IN', 'KS', 'KY', 'LA', 'MA', 'MD', 'ME', 'MI', 'MN', 'MO', 'MS', 'MT', 'NC', 'ND', 'NE', 'NH', 'NJ', 'NM', 'NV', 'NY', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VA', 'VT', 'WA', 'WI', 'WV', 'WY'];
+
+      $("#state-picker").empty();
+
+      for (var index = 0; index < states.length; index++) {
+        var state = states[index];
+        $("#state-picker")
+          .append($("<div>", { class: "state-container" })
+            .append($("<input>", { id: state, name: state, type: "checkbox", class: "state-checkbox" }))
+            .append($("<label>", { for: state, class: "state-label" }).text(state))
+          );
+      }
+    }
+
+    var setStateFilter = function () {
+
+      var states = [];
+      $("#state-picker input:checked").each(function () {
+        states.push($(this).attr("name"));
+      });
+
+      if (states.length > 0) {
+
+        const basicStateFilter = {
+          $schema: "http://powerbi.com/product/schema#basic",
+          target: {
+            table: "Customers",
+            column: "State"
+          },
+          operator: "In",
+          values: states
+        }
+
+        // display filter in browser console
+        console.log("Applied Filter", basicStateFilter);
+
+        // apply filter to report
+        report.setFilters([basicStateFilter]);
+      }
+      else {
+        report.removeFilters();
+      }
+
+    };
+
+    
+    $(function () {
+      var widthBuffer = 264;
+      var heightBuffer = 18;
+      $("#embedContainer").width($(window).width() - widthBuffer);
+      $("#embedContainer").height($(window).height() - heightBuffer);
+      $("#leftnav").height($(window).height() - heightBuffer);
+      $(window).resize(function () {
+        $("#embedContainer").width($(window).width() - widthBuffer);
+        $("#embedContainer").height($(window).height() - (heightBuffer));
+        $("#leftnav").height($(window).height() - heightBuffer);
+      });
+    });
+
+
+  </script>
+
+</body>
+</html>

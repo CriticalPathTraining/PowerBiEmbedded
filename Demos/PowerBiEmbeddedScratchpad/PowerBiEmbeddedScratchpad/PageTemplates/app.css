@@ -1,0 +1,158 @@
+﻿body {
+  margin: 0;
+  padding: 0;
+  background-color: #EEE;
+}
+
+#toolbar {
+  padding: 8px;
+  background-color: black;
+}
+
+  #toolbar button {
+    font-size: 24px;
+    width: 150px
+  }
+
+#leftnav {
+  float: left;
+  width: 240px;
+  background-color: white;
+  padding: 0px;
+  border: solid 1px #333;
+}
+
+#leftnav h3 {
+  margin: 0;
+  padding: 4px;
+  padding-left: 12px;
+  color: white;
+  background-color: black;
+  font-size: 24px;
+}
+
+  #leftnav h4 {
+    margin: 0;
+    padding: 4px;
+    padding-bottom: 2px;
+    padding-left: 12px;
+    color: black;
+    background-color: #BBB;
+    font-size: 12px;
+  }
+
+#leftnav ul {
+  margin-top: 0;
+  padding: 4px;
+}
+
+  #leftnav li {
+    margin: 8px;
+    list-style-type: none;
+  }
+
+    #leftnav li a {
+      color: darkblue;
+      text-decoration: none;
+    }
+leftnav-menu {
+  width: 100px;
+}
+
+#loading img {
+  width: 80px;
+  margin-top: 36px;
+  margin-left: 72px;
+}
+
+
+#output-display {
+  background-color: white;
+  padding: 8px;
+  border: solid 1px #333;
+}
+
+  #output-display h3 {
+    margin: 0;
+    border-bottom: solid 1px black;
+    color: black;
+  }
+
+  #output-display h4 {
+    margin: 0px;
+    margin-bottom: 4px;
+    background-color: black;
+    color: white;
+    padding: 4px;
+    font-size: 0.9em;
+  }
+
+  #output-display div {
+    margin: 4px;
+  }
+
+#visual-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0;
+}
+
+  #visual-table thead td {
+    color: white;
+    background-color: black;
+    font-size: 10px;
+    padding: 4px;
+  }
+
+  #visual-table tr td {
+    color: #222;
+    border: 1px black solid;
+    padding: 4px;
+    background-color: White;
+    border-collapse: collapse;
+    font-size: 9px;
+  }
+
+
+#state-picker {
+  background-color: white;
+  padding: 4px;
+  padding-left: 6px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin: 0px;
+  width: auto;
+}
+
+
+.state-container {
+  display: inline-block;
+  width: 52px;
+  margin: 1px;
+  margin-left: 3px;
+  background-color: white;
+  border-radius: 2px;
+}
+
+.state-checkbox {
+  vertical-align: middle;
+}
+
+.state-label {
+  vertical-align: middle;
+  font-size: 14px;
+  padding: 0;
+  margin-bottom: 0px;
+}
+
+#filter-buttons {
+  text-align: center;
+}
+
+  #filter-buttons input {
+    margin-top: 12px;
+    width: 92%;
+    font-size: 16px;
+    padding: 3px;
+    border-radius: 4px;
+  }
