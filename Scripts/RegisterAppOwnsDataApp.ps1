@@ -1,6 +1,5 @@
-﻿# log into Azure AD
-$userName = "user1@MY_TENANT.onMicrosoft.com"
-$password = ""
+﻿                                                                                                                                            $userName = "tedp@devinaday2019.onMicrosoft.com"
+                                                                                                                               $password = "Pa`$`$word!"
 
 $securePassword = ConvertTo-SecureString –String $password –AsPlainText -Force
 $credential = New-Object –TypeName System.Management.Automation.PSCredential `
@@ -9,7 +8,7 @@ $credential = New-Object –TypeName System.Management.Automation.PSCredential `
 $authResult = Connect-AzureAD -Credential $credential
 
 # display name for new confidential client app
-$appDisplayName = "App-Owns-Data App"
+$appDisplayName = "The Other App-Owns-Data App"
 
 # get user account ID for logged in user
 $user = Get-AzureADUser -ObjectId $authResult.Account.Id

@@ -1,17 +1,18 @@
-$appDisplayName = "Power BI Day SPA"
-$replyUrl = "http://localhost:8080"
-$outputFile = "$PSScriptRoot\PowerBIDaySPA.txt"
+                                                                                                                                            $userName = "tedp@devinaday2019.onMicrosoft.com"
+                                                                                                                               $password = "Pa`$`$word!"
 
-# Connect to Azure AD
-$userName = "user1@MY_TENANT.onMicrosoft.com"
-$password = ""
 
 $securePassword = ConvertTo-SecureString –String $password –AsPlainText -Force
 $credential = New-Object –TypeName System.Management.Automation.PSCredential `
                          –ArgumentList $userName, $securePassword
 
 $authResult = Connect-AzureAD -Credential $credential
-cls
+
+
+$appDisplayName = "My Azure AD App"
+$replyUrl = "http://localhost:8080"
+$outputFile = "$PSScriptRoot\MyAzureADApp.txt"
+
 
 # Get Tenant Details
 $tenantId = $authResult.TenantId.ToString()
